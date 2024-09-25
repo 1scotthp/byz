@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
@@ -17,8 +18,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const functions = getFunctions(app);
+// const auth = initializeAuth(app);
 
 if (location.hostname === "localhost") {
   connectFirestoreEmulator(db, 'localhost', 8080);
   connectFunctionsEmulator(functions, "localhost", 5001);
 }
+
+export { app };
