@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { formatMoney } from 'utils.ts'
 
 export default function App() {
+  const nextBid = 100;
+  const currentBid = 50;
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Current bid {formatMoney(currentBid)}</Text>
+      <Button> Bid {formatMoney(nextBid)} </Button>
       <StatusBar style="auto" />
     </View>
   );
