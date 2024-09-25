@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+//import { connectAuthEmulator } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -18,10 +19,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const functions = getFunctions(app);
-// const auth = initializeAuth(app);
+//const auth = initializeAuth(app);
 
 if (location.hostname === "localhost") {
-  connectFirestoreEmulator(db, 'localhost', 8080);
+  //connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
+  connectFirestoreEmulator(db, 'localhost', 8082);
   connectFunctionsEmulator(functions, "localhost", 5001);
 }
 

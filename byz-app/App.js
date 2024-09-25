@@ -32,6 +32,8 @@ export default function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const auctionId = urlParams.get('id');
 
+    console.log("Auction ID: ", auctionId);
+
     if (!auctionId) {
       setLoading(false);
       return;
@@ -40,6 +42,7 @@ export default function App() {
     const auctionRef = doc(db, 'auctions', auctionId);
     const unsubscribeSnapshot = onSnapshot(auctionRef, (doc) => {
       if (doc.exists()) {
+        console.log("Auction data: ", doc.data());
         setAuction({ id: doc.id, ...doc.data() });
       } else {
         console.log("No such auction!");
