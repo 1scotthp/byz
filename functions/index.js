@@ -17,6 +17,10 @@ function getTimestamp() {
 exports.getAuction = functions.https.onCall(async (data, context) => {
   const { auctionId } = data;
   
+  if (!auctionId || typeof auctionId !== 'string' || auctionId.trim() === '') {
+    throw new functions.https.HttpsError('invalid-argument', 'Invalid auction ID');
+  }
+
   try {
     const auctionDoc = await db.collection('auctions').doc(auctionId).get();
     
@@ -93,33 +97,5 @@ exports.placeBid = functions.https.onCall(async (data, context) => {
   } catch (error) {
     console.error("Error in placeBid transaction:", error);
     throw new functions.https.HttpsError('internal', error.message || 'An error occurred while placing the bid');
-  }
-});
-
-exports.createAuction = functions.https.onCall(async (data, context) => {
-  // Ensure the user is authenticated
-  if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated to create an auction');
-  }
-
-  const { title, description, startingBid, endTime } = data;
-
-  try {
-    const auctionRef = await db.collection('auctions').add({
-      title,
-      description,
-      currentBid: startingBid,
-      startingBid,
-      currentWinner: null,
-      createdBy: context.auth.uid,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      endTime: admin.firestore.Timestamp.fromDate(new Date(endTime)),
-      lastBidTime: null
-    });
-
-    return { id: auctionRef.id };
-  } catch (error) {
-    console.error("Error creating auction:", error);
-    throw new functions.https.HttpsError('internal', 'Error creating auction');
   }
 });

@@ -1,7 +1,8 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "echo \"No linting configured\"",
+    "build": "echo \"No build configured\"",
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",

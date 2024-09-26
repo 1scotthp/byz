@@ -36,6 +36,7 @@ export default function App() {
     // Get the auction ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
+    console.log("Auction ID:", id);
     setAuctionId(id);
 
     if (!id) {
