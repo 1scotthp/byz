@@ -29,7 +29,7 @@ jobs:
         run: npm run build:web
       
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v4.3.0
+        uses: w9jds/firebase-action@master
         with:
           args: deploy
         env:
