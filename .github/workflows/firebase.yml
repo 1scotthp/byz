@@ -27,9 +27,10 @@ jobs:
       # Run build script if you have one
       - name: Build project
         run: npm run build:web
-
-      # Deploy to Firebase
+      
       - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v4.3.0
+        with:
+          args: deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy
