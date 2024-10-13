@@ -1,18 +1,9 @@
 // App.js
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ActivityIndicator,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { AccountProvider, AccountContext } from "./AccountContext";
 import Auction from "./pages/Auction";
-
-// const functions = getFunctions(app);
+import Home from "./pages/Home";
 
 export function formatMoney(amount, locale = "en-US", currency = "USD") {
   return new Intl.NumberFormat(locale, {
@@ -25,42 +16,41 @@ export function formatMoney(amount, locale = "en-US", currency = "USD") {
 
 export default function App() {
   return (
-    <AccountProvider>
+    // <AccountProvider>
       <AppLoggedIn />
-    </AccountProvider>
+    // </AccountProvider>
   );
 }
 
 const AppLoggedIn = () => {
-  const { user } = useContext(AccountContext);
-  const [auctionId, setAuctionId] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [auctionId, setAuctionId] = useState(null);
+  // const [loading, setLoading] = useState(true);
 
-  // Extract auctionId once on mount
-  useEffect(() => {
-    const extractAuctionId = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const id = urlParams.get("id");
-      console.log("Auction ID:", id);
-      setAuctionId(id);
-      setLoading(false);
-    };
+  // // Extract auctionId once on mount
+  // useEffect(() => {
+  //   const extractAuctionId = () => {
+  //     const urlParams = new URLSearchParams(window.location.search);
+  //     const id = urlParams.get("id");
+  //     console.log("Auction ID:", id);
+  //     setAuctionId(id);
+  //     setLoading(false);
+  //   };
 
-    extractAuctionId();
-  }, []);
+  //   extractAuctionId();
+  // }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.centered}>
+  //       <ActivityIndicator size="large" />
+  //     </View>
+  //   );
+  // }
 
-  if (auctionId) {
-    console.log("AUCTION ID:", auctionId);
-    return <Auction auctionId={auctionId} />;
-  }
+  // if (auctionId) {
+    // console.log("AUCTION ID:", auctionId);
+    return <Auction />;
+  // }
 
   return <Home />; // Render the Home component when no auctionId is present
 };

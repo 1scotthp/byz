@@ -33,7 +33,6 @@ export const AccountProvider = ({ children }) => {
   if (!user) {
     return <GoogleSignIn />;
   }
-  console.log("USER: ", user);
 
   return (
     <AccountContext.Provider value={{ user }}>
