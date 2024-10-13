@@ -8,6 +8,7 @@ import {
   Pressable,
   ActivityIndicator,
   TextInput,
+  Image,
 } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
@@ -34,6 +35,7 @@ export function formatMoney(amount, locale = "en-US", currency = "USD") {
 export default function App() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentBid, setCurrentBid] = useState(1650);
+  const [previousMaxBid, setPreviousMaxBid] = useState(1600);
 
   // Handler functions
   const openModal = () => {
@@ -100,7 +102,14 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Text style={{ color: "white" }}>Image</Text>
+        {/* <Text style={{ color: "white" }}>Image</Text> */}
+        <Image
+          source={require("../assets/apt.png")} // Adjust the path as needed
+          style={styles.image}
+          resizeMode="cover" // or "cover", "stretch", "center"
+          accessible={true}
+          accessibilityLabel="Description of the image"
+        />
       </View>
       <View style={styles.contentContainer}>
         <View style={styles.topContainer}>
@@ -114,10 +123,15 @@ export default function App() {
           </View>
         </View>
         <View style={styles.bidContentContainer}>
+          <FontAwesome5
+            name="info-circle"
+            style={{ position: "absolute", left: 6, top: 6 }}
+            size={18}
+            color="black"
+          />
           <Text style={styles.timerText}> {`Ends in ${timeLeft}`}</Text>
           <Text style={styles.timerText}>
-            {" "}
-            {`Highest Bid: ${formatMoney(currentBid)}`}
+            {`Highest Bid: ${formatMoney(previousMaxBid)}`}
           </Text>
           <Pressable
             style={({ pressed }) => [
@@ -127,7 +141,7 @@ export default function App() {
             onPress={openModal} // Opens the modal
           >
             <Text style={styles.buttonText}>
-              {`Bid ${formatMoney(currentBid + 50)}`}
+              {`Bid ${formatMoney(currentBid)}`}
             </Text>
           </Pressable>
           <Pressable
@@ -135,7 +149,7 @@ export default function App() {
               styles.buttonStyle,
               pressed && styles.buttonPressed,
             ]}
-            onPress={() => onBidPress(currentBid + 50)}
+            onPress={() => onBidPress(currentBid)}
           >
             <Text style={styles.buttonText}>{`More bid options`}</Text>
           </Pressable>
@@ -147,7 +161,6 @@ export default function App() {
               pressed && styles.buttonPressed,
               styles.footerButton,
             ]}
-            onPress={() => onBidPress(currentBid + 100)}
           >
             <FontAwesome5 name="sign-out-alt" size={24} color="black" />
           </Pressable>
@@ -157,17 +170,18 @@ export default function App() {
               pressed && styles.buttonPressed,
               styles.footerButton,
             ]}
-            onPress={() => onBidPress(currentBid + 100)}
           >
             <FontAwesome5 name="bell" size={24} color="black" />
           </Pressable>
         </View>
       </View>
       <BidModal
+        setCurrentBid={setCurrentBid}
         isVisible={isModalVisible}
-        currentBid={currentBid + 50}
+        currentBid={currentBid}
         onClose={closeModal}
         onSubmitBid={handleSubmitBid}
+        previousMaxBid={previousMaxBid}
       />
     </View>
   );
@@ -203,6 +217,10 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     color: "white",
   },
+  image: {
+    width: "100%", // Ensures the image fills the container's width
+    height: "100%", // Ensures the image fills the container's height
+  },
   title: {
     fontSize: 16,
     marginBottom: 4,
@@ -224,6 +242,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginTop: 18,
     padding: 12,
+    borderRadius: 6,
   },
   buttonStyle: {
     width: "80%",
@@ -237,6 +256,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "black",
+    borderRadius: 6,
   },
   customBidContainer: {
     flexDirection: "row",
@@ -250,7 +270,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     padding: 12,
     height: "80%",
-    backgroundColor: "lightgray",
+    backgroundColor: "transparent",
   },
   input: {
     height: 40,

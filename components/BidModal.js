@@ -26,20 +26,15 @@ export function formatMoney(amount, locale = "en-US", currency = "USD") {
     .concat("/mo");
 }
 
-const BidModal = ({ isVisible, currentBid, onClose, onSubmitBid }) => {
-  const [customBid, setCustomBid] = useState("");
+const BidModal = ({
+  isVisible,
+  currentBid,
+  onClose,
+  onSubmitBid,
+  setCurrentBid,
+  previousMaxBid,
+}) => {
   const [error, setError] = useState("");
-
-  const handleSubmit = () => {
-    const bidAmount = parseFloat(customBid);
-    if (isNaN(bidAmount) || bidAmount <= currentBid) {
-      setError("Please enter a valid bid higher than the current bid.");
-      return;
-    }
-    onSubmitBid(bidAmount);
-    setCustomBid("");
-    setError("");
-  };
 
   const handleClose = () => {
     onClose();
@@ -47,7 +42,9 @@ const BidModal = ({ isVisible, currentBid, onClose, onSubmitBid }) => {
     setError("");
   };
 
-  const bidOptions = [1750, 1800, 1850];
+  const bidOptions = [50, 100, 150, 200]
+    .map((n) => previousMaxBid + n)
+    .filter((bid) => bid != currentBid);
 
   return (
     <Modal
@@ -88,8 +85,16 @@ const BidModal = ({ isVisible, currentBid, onClose, onSubmitBid }) => {
                   return (
                     <Pressable
                       style={[styles.buttonStyle, styles.smallBidButtonStyle]}
+                      onPress={() => {
+                        setCurrentBid(amount);
+                      }}
                     >
-                      <Text style={styles.buttonText}>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          { color: "black", fontSize: 16, fontWeight: "bold" },
+                        ]}
+                      >
                         {`${formatMoney(amount)}`}
                       </Text>
                     </Pressable>
@@ -176,7 +181,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
+    color: "white",
+    fontWeight: "800",
   },
   modalContainer: {
     width: "100%",
@@ -197,11 +204,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 18,
-    backgroundColor: "lightgreen",
+    backgroundColor: "#2d9127",
     color: "white",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: "black",
+    borderRadius: 6,
+    // borderWidth: 1,
+    // borderStyle: "solid",
+    // borderColor: "black",
   },
   bidRow: {
     flexDirection: "row",
